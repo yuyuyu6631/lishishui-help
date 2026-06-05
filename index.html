@@ -491,22 +491,54 @@
     /* ==========================================
        常见问题 (FAQ 检索过滤模块)
        ========================================== */
-    .search-bar-box { background: var(--card-bg); padding: 12px 0 12px; border-bottom: 1px solid var(--border); } /* 横向 padding 移入 tabs，让滚动自然溢出屏幕边缘 */
-    .search-input-wrapper { position: relative; margin-bottom: 10px; }
-    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-muted); opacity: 0.85; /* 略微降低非激活态亮度，与 active 亮蓝拉开黄金视觉阶梯对比度 */ }
-    .search-input {
-      width: 100%; height: 36px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 10px;
-      padding-left: 36px; padding-right: 12px; font-size: 12.5px; outline: none; color: var(--text-main); transition: all 0.2s;
+    .search-bar-box {
+      background: transparent; /* 去除原本生硬的横向占满大白条背景 */
+      padding: 16px 0 6px; /* 顶部提供 16px 间距，与新手指南 Timeline 顶边严格对称 */
+      border-bottom: none; /* 移除生硬下分割线，保持通透连贯 */
     }
-    .search-input:focus { background: var(--card-bg); border-color: var(--primary); }
+    .search-input-wrapper { position: relative; margin-bottom: 12px; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text-muted); opacity: 0.85; z-index: 5; }
+    .search-input {
+      width: 100%;
+      height: 40px; /* 稍微提升高度，更显高奢大气 */
+      background: var(--card-bg); /* 改用白色卡片底，与底图形成高档阶梯对比 */
+      border: 1px solid var(--border);
+      border-radius: 12px; /* 高级大圆角 */
+      padding-left: 36px;
+      padding-right: 12px;
+      font-size: 13px;
+      outline: none;
+      color: var(--text-main);
+      box-shadow: var(--shadow-card); /* 增加微弱投影，与步骤卡片完全一致 */
+      transition: all 0.25s;
+    }
+    .search-input:focus {
+      background: var(--card-bg);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(38, 125, 255, 0.15); /* 品牌蓝呼吸外斑 */
+    }
 
-    .filter-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 0 16px; /* 两侧留出呼吸间距，滑动到边缘时不会被截断 */ }
+    .filter-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 0 16px; }
     .filter-tabs::-webkit-scrollbar { display: none; }
     .filter-tab {
-      background: var(--bg-main); border: 1px solid var(--border); color: var(--text-muted); opacity: 0.85; /* 略微降低非激活态亮度，与 active 亮蓝拉开黄金视觉阶梯对比度 */
-      font-size: 10.5px; font-weight: 700; padding: 4px 10px; border-radius: 20px; white-space: nowrap; cursor: pointer;
+      background: var(--card-bg); /* 标签改用白色卡片底，高保真还原小程序胶囊 */
+      border: 1px solid var(--border);
+      color: var(--text-muted); opacity: 0.85;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: var(--shadow-card); /* 增加微小投影 */
+      transition: all 0.2s;
     }
-    .filter-tab.active { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .filter-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(38, 125, 255, 0.2);
+    }
 
     .faq-list { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
     .faq-card { background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow-card); }
@@ -910,6 +942,9 @@
       const tabFaqBtn = document.getElementById('tab-faq-btn');
       const panelTimeline = document.getElementById('page-guide');
       const panelFaq = document.getElementById('page-faq');
+
+      // 重置大页面滚动高度，彻底杜绝由于高度瞬间突变导致的滚动条闪跳与 Tab 栏拉扯抖动
+      pageHelpCenter.scrollTop = 0;
 
       tabTimelineBtn.classList.remove('active');
       tabFaqBtn.classList.remove('active');
