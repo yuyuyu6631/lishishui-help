@@ -427,9 +427,19 @@
       z-index: 10;
     }
 
+    #page-help-center {
+      overflow-y: hidden;
+    }
+
     /* 聚合页中的两个内容面板 */
     .help-content-panel { display: none; }
-    .help-content-panel.active { display: block; }
+    .help-content-panel.active {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
 
     /* 使用指南 Timeline 排版 */
     .timeline-banner {
@@ -565,21 +575,35 @@
     /* ==========================================
        Page 3: 使用技巧详情页
        ========================================== */
-    .detail-container { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    .detail-container { padding: 20px 16px; display: flex; flex-direction: column; }
     .gif-viewport {
       width: 100%;
       height: 48vh;
       max-height: 380px; /* 科学限高，防止大屏上 GIF 过于臃肿而挤压文字说明 */
       min-height: 280px;
-      border-radius: 20px;
+      border-radius: 36px;
       overflow: hidden;
-      box-shadow: var(--shadow-soft);
-      background: var(--bg-main);
-      border: 1px solid var(--border);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 0 8px #1e293b;
+      background: #000000;
+      border: 2px solid rgba(255, 255, 255, 0.15);
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
+      margin: 10px 0 24px;
+    }
+    .gif-viewport::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 12px;
+      background: #000000;
+      border-radius: 6px;
+      z-index: 50;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
     }
     .gif-viewport img {
       max-width: 100%;
@@ -587,50 +611,85 @@
       object-fit: contain; /* 完美比例保留，坚决不拉伸变形 */
       display: block;
     }
-    .meta-box { background: var(--card-bg); border-radius: 18px; padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-card); }
-    .meta-row { font-size: 12.5px; margin-bottom: 12px; line-height: 1.5; }
-    .meta-row:last-child { margin-bottom: 0; }
-    .meta-label {
-      font-weight: 800;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
+    
+    /* 详情页高奢卡片化重构 */
+    .meta-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 16px;
+      transition: all 0.3s;
     }
-    .meta-label svg {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-      color: var(--primary);
+    .meta-card:last-child {
+      margin-bottom: 0;
     }
     
-    .step-list { display: flex; flex-direction: column; gap: 8px; }
-    .step-item {
-      font-size: 11.5px;
-      color: var(--text-muted); opacity: 0.85; /* 略微降低非激活态亮度，与 active 亮蓝拉开黄金视觉阶梯对比度 */
-      line-height: 1.45;
+    /* 痛点背景卡片特化样式：左侧增加粗强调条，微量渐变底色，塑造极佳层级 */
+    .pain-card {
+      border-left: 4px solid var(--primary);
+      background: linear-gradient(90deg, var(--primary-light) 0%, var(--card-bg) 100%);
+    }
+    
+    .meta-card-header {
       display: flex;
+      align-items: center;
       gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .meta-card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+    }
+    .meta-card-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .meta-card-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+    }
+    
+    .meta-card-content {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.7; /* 提升行高至 1.7，打造呼吸感 */
+    }
+
+    .step-list { display: flex; flex-direction: column; gap: 12px; }
+    .step-item {
+      font-size: 12.5px;
+      color: var(--text-muted); opacity: 0.85; /* 略微降低非激活态亮度，与 active 亮蓝拉开黄金视觉阶梯对比度 */
+      line-height: 1.7;
+      display: flex;
+      gap: 10px;
       align-items: flex-start;
     }
     .step-badge {
       background: var(--primary);
       color: #ffffff;
       font-weight: 800;
-      font-size: 10px;
-      width: 16px;
-      height: 16px;
+      font-size: 10.5px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 2px 4px rgba(111, 77, 191, 0.15);
-      margin-top: 1px;
+      box-shadow: 0 2px 5px rgba(0, 82, 217, 0.2);
+      margin-top: 2px;
     }
     .step-item strong { color: var(--text-main); font-weight: 700; }
 
@@ -665,44 +724,52 @@
     }
 
     .standard-box {
-      color: var(--primary);
-      background: transparent;
-      border-left: 3px solid var(--primary);
-      padding: 6px 12px;
-      font-weight: 700;
-      font-size: 12px;
-      line-height: 1.5;
-      margin-top: 6px;
+      margin-top: 16px;
+      background: var(--emerald-light);
+      border-left: 3.5px solid var(--emerald);
+      border-radius: 0 12px 12px 0;
+      padding: 12px 16px;
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: var(--text-main);
+      box-shadow: var(--shadow-card);
     }
-    @media (prefers-color-scheme: dark) {
-      .standard-box {
-        color: var(--primary);
-        border-left-color: var(--primary);
-      }
+    .standard-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      color: var(--emerald);
+      margin-bottom: 6px;
+    }
+    .standard-content {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
     }
 
     .alert-notice {
-      margin-top: 16px;
-      background: var(--bg-main);
-      border: 1px solid var(--border);
-      border-left: 3px solid #d99900;
-      border-radius: 8px;
-      padding: 10px 12px;
+      background: var(--gold-light);
+      border: 1px solid rgba(197, 131, 24, 0.15);
+      border-left: 3.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 12px 16px;
       box-shadow: var(--shadow-card);
+      margin-top: 16px;
     }
     .alert-title {
-      font-size: 12px;
+      font-size: 13.5px;
       font-weight: 800;
-      color: #d99900;
-      margin-bottom: 4px;
+      color: var(--gold);
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
     .alert-desc {
-      font-size: 11px;
-      color: var(--text-muted); opacity: 0.85; /* 略微降低非激活态亮度，与 active 亮蓝拉开黄金视觉阶梯对比度 */
-      line-height: 1.5;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
     }
 
     .quote-box { border-left: 4px solid var(--primary); background: var(--primary-light); border-radius: 0 16px 16px 0; padding: 14px 16px; font-size: 12px; line-height: 1.6; color: var(--text-main); box-shadow: var(--shadow-card); }
@@ -944,8 +1011,9 @@
       const panelTimeline = document.getElementById('page-guide');
       const panelFaq = document.getElementById('page-faq');
 
-      // 重置大页面滚动高度，彻底杜绝由于高度瞬间突变导致的滚动条闪跳与 Tab 栏拉扯抖动
-      pageHelpCenter.scrollTop = 0;
+      // 重置子面板滚动高度，彻底杜绝由于高度瞬间突变导致的滚动条闪跳与 Tab 栏拉扯抖动
+      panelTimeline.scrollTop = 0;
+      panelFaq.scrollTop = 0;
 
       tabTimelineBtn.classList.remove('active');
       tabFaqBtn.classList.remove('active');
@@ -985,22 +1053,12 @@
       // 单指引页下点击无动作
     });
 
-    // ==========================================
-    // 8 个核心指南步骤定义 (对齐 gifs)
-    // ==========================================
-    // ==========================================
-    // 微信小程序真实通关指南四大 Timeline 核心步骤数据定义 (100% 对齐 Word 官方文档真实交互与商务闭环)
-    // ==========================================
-    // ==========================================
-        // ==========================================
-    // 全局离线 Base64 动图共享变量 (杜绝由于重复引用导致的 HTML 大小膨胀，维持 5.10MB 的黄金体积)
-    // ==========================================
     const GIF_DATA_1 = "";
     const GIF_DATA_2 = "";
     const GIF_DATA_3 = "gifs/03-avatar-init.gif";
     const GIF_DATA_4 = "gifs/04-avatar-train.gif";
     const GIF_DATA_7 = "gifs/07-travel-match.gif";
-const GIF_DATA_9 = "gifs/09-business-card-chat.gif";
+    const GIF_DATA_9 = "gifs/09-business-card-chat.gif";
 
     const guideData = [
       {
@@ -1013,8 +1071,9 @@ const GIF_DATA_9 = "gifs/09-business-card-chat.gif";
         painPoint: "手动录入简历信息太繁琐，打字容易出错，且档案不完善会导致分身代聊缺乏基础数据支持。",
         steps: [
           "在【我的】页面点击【数字档案】，选择【编辑个人档案】。",
-          "支持【语音录入】个人详情，或点击【上传文档】一键解析并自动填充 PDF/Word/TXT 格式的个人简短履历。",
-          "自动填充姓名、机构、所在地、行业、岗位等信息后，核对无误并点击【保存并更新】。"
+          "支持【语音录入】或【上传文档】（如 PDF/Word/TXT）进行一键智能解析。",
+          "系统解析后会自动填充姓名、机构、所在地、行业、岗位等字段。",
+          "仔细核对所有自动填充的信息，确认无误后点击【保存并更新】。"
         ]
       },
       {
@@ -1162,11 +1221,13 @@ const GIF_DATA_9 = "gifs/09-business-card-chat.gif";
       let standardHtml = '';
       if (item.standard) {
         standardHtml = `
-          <div class="meta-row" style="margin-top:16px; margin-bottom: 0;">
-            <span class="meta-label">
-              ✅ 完成标准
-            </span>
-            <div class="standard-box">` + item.standard + `</div>
+          <!-- 完成标准 Box -->
+          <div class="standard-box">
+            <div class="standard-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>完成标准</span>
+            </div>
+            <div class="standard-content">` + item.standard + `</div>
           </div>
         `;
       }
@@ -1178,7 +1239,8 @@ const GIF_DATA_9 = "gifs/09-business-card-chat.gif";
           <!-- 温馨提示/最佳实践贴士 Alert Card -->
           <div class="alert-notice">
             <div class="alert-title">
-              🎁 注意事项
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>注意事项</span>
             </div>
             <div class="alert-desc">` + item.notice + `</div>
           </div>
@@ -1187,28 +1249,34 @@ const GIF_DATA_9 = "gifs/09-business-card-chat.gif";
 
       const detailContent = document.getElementById('detail-content');
       detailContent.innerHTML = `
-        <!-- 置顶的高保真操作动图 -->
+        <!-- 置顶的高保真操作动图 (手机模拟外壳) -->
         <div class="gif-viewport">
           <img src="` + item.gif + `" alt="操作演示">
         </div>
 
-        <!-- 极致干货去噪展示盒 -->
-        <div class="meta-box">
-          <div class="meta-row">
-            <span class="meta-label">
-              💡 问题背景
+        <!-- 痛点背景卡片 -->
+        <div class="meta-card pain-card">
+          <div class="meta-card-header">
+            <span class="meta-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>
             </span>
-            <div style="color:var(--text-muted); font-size:12px; line-height:1.5; padding-left: 2px;">` + item.painPoint + `</div>
+            <span class="meta-card-title">问题背景</span>
           </div>
-          
-          <div class="meta-row" style="margin-top:16px;` + (item.standard ? '' : ' margin-bottom: 0;') + `">
-            <span class="meta-label">
-              📲 操作步骤
-            </span>
-            <div class="step-list">` + stepsHtml + `</div>
-          </div>
+          <div class="meta-card-content">` + item.painPoint + `</div>
+        </div>
 
-          ` + standardHtml + `
+        <!-- 操作步骤卡片 -->
+        <div class="meta-card steps-card">
+          <div class="meta-card-header">
+            <span class="meta-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
+            </span>
+            <span class="meta-card-title">操作步骤</span>
+          </div>
+          <div class="meta-card-content">
+            <div class="step-list">` + stepsHtml + `</div>
+            ` + standardHtml + `
+          </div>
         </div>
 
         ` + noticeHtml + `
