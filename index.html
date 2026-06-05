@@ -385,6 +385,7 @@
       background: var(--card-bg);
       border-bottom: 1px solid var(--border);
       height: 46px;
+      flex-shrink: 0; /* 强力锁死高度：决不被 flex 挤压变形，彻底消除切换抖动缺陷 */
       align-items: center;
       position: sticky;
       top: 0;
